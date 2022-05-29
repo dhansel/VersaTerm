@@ -8,6 +8,9 @@ The the following necessary parts are currently not available at DigiKey and hav
   - Raspberry Pi Pico: not sold at DigiKey, available at AdaFruit, part #4883
   - 2N7000 MOSFET (need 7): currently (May 2022) on backorder at DigiKey. Available on EBay from various sellers.
 
+If you want to use the provided [3d-printable enclosure](../enclosure), you will need four machine screws #4-40 with length 22mm (7/8") below the head and matching
+#4-40 nuts. DigiKey part #335-1089-ND and #36-9600-ND will fit.
+  
 # Assembly tips
   
 The vast majority of solder points are through-hole and easy to solder, except for the following:

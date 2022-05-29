@@ -10,7 +10,7 @@ Requires:
 Steps:
 ```
 git clone https://github.com/dhansel/VersaTerm.git
-cd VersaTerm/lib
+cd VersaTerm/software/lib
 git submodule update --init
 cd pico-sdk/lib
 git submodule update --init

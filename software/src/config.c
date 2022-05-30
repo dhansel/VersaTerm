@@ -527,7 +527,7 @@ static uint16_t get_keyboard_repeat_delay_ms(uint8_t delay)
 
 uint32_t config_get_serial_baud()
 {
-  return settings.Serial.baud/10;
+  return settings.Serial.baud;
 }
 
 uint8_t config_get_serial_bits()

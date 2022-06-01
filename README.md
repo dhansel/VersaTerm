@@ -7,7 +7,7 @@ A versatile DIY serial terminal.
 ### Highlights
 
 - Instant-on/Instant-off - no waiting for OS to boot, no need to shut down safely
-- Natively outputs HDMI and VGA signals (no conversion)
+- Native HDMI and VGA video output (no conversion)
 - Supports PS/2 and USB keyboards (including keyboards with integrated USB hubs)
 - RS232 and TTL level serial input/output (TTL switchable between 3.3V and 5V)
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control

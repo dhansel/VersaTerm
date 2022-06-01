@@ -21,8 +21,6 @@ add_executable(VersaTerm
 
 target_compile_definitions(VersaTerm PRIVATE
 	DVI_VERTICAL_REPEAT=1
-        PICO_BOOTSEL_VIA_DOUBLE_RESET_TIMEOUT_MS=1000
-	PICO_BOOTSEL_VIA_DOUBLE_RESET_ACTIVITY_LED=25
 	)
 
 target_include_directories(VersaTerm PUBLIC
@@ -39,7 +37,6 @@ target_compile_definitions(VersaTerm PRIVATE
 target_link_libraries(VersaTerm
 	pico_stdlib
 	pico_multicore
-        pico_bootsel_via_double_reset
 	hardware_flash
 	libdvi
         PicoVGA

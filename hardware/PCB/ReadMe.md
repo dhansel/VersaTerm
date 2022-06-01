@@ -1,6 +1,6 @@
 # Parts 
 
-I sourced most of the parts from DigiKey. The VersaTermBOM.xlsx file in this folder includes all the parts and their part numbers.
+I sourced most of the parts from DigiKey. The [VersaTermBOM.xlsx](VersaTermBOM.xlsx) file in this folder includes all the parts and their part numbers.
 You can also click the link below to automatically create a shopping cart at DigiKey that contains most of the parts:<BR>
 https://www.digikey.com/short/d0qw14h1
 
@@ -25,4 +25,38 @@ The vast majority of solder points are through-hole and easy to solder, except f
   - When soldering the male Molex connector for the TTL serial connection to the board, do not stick it into the board as far as it will go, otherwise the 
   female connector will not fit afterwards. I recommend soldering the male connector while the female one is plugged in, that way there is definitely enough space.
 
+# Part Placement
+
+For supplier and manufacturer part numbers, see [VersaTermBOM.xlsx](VersaTermBOM.xlsx)
+
+Designator	|  Component
+------------|-------------
+R21,R24	| Resistor 100 Ohm
+R1,R2,R3,R4,R5,R6,R7,R8	| Resistor 270 Ohm
+R14	| Resistor 390 Ohm
+R17,R20,R25,R26	| Resistor 470 Ohm
+R13,R16,R19,R27,R28,R29,R30	| Resistor 1k
+R15,R18	| Resistor 2k2
+R22	| Resistor 4.7k
+R9,R10,R11,R12,R23	| Resistor 10k Ohm
+D1,D2	| Diode SMT Schottky
+D3,D4,D5,D6,D7 | Diode Axial 1N4148
+Q1,Q2,Q3,Q4,Q5,Q6,Q7 | MOSFET 2N7000
+C1,C2 | Capacitor 10uF
+3.3V / 5V	| Switch
+RESET,DEFAULTS | Button
+REG1	| Recom 5V Regulator
+SG1	| Buzzer
+Power	| Barrel Connector
+Power	| USB-B Mini Connector
+VGA	| DB15 Connector
+PS/2	| PS/2 Connector
+HDMI	| HDMI Connector
+USB	| USB-A Connector
+RS232	| DB9 Connector
+TTL Serial	| Molex Connector Male
+U1	| Raspberry Pi Pico
+U3	| MAX3232 board
+  
+# Finished PCB
 ![board_top](../pictures/board_top.jpg)

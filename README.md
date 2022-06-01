@@ -4,6 +4,32 @@ A versatile serial terminal
 ![Labeled Board](hardware/pictures/board_labeled.jpg)
 (more pictures [here](hardware/pictures/ReadMe.md))
 
+### Highlights
+
+- Instant-on/Instant-off - no waiting for OS to boot, no need to shut down safely
+- Natively outputs HDMI and VGA signals (no conversion)
+- Supports PS/2 and USB keyboards (including keyboards with integrated USB hubs)
+- RS232 and TTL level serial input/output (TTL switchable between 3.3V and 5V)
+- Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
+- Can be powered via USB or 7-28V DC
+- Highly configurable, including user-uploadable fonts
+- Supports all VT100 attributes: bold/underline/blink/inverse
+- Supports 16 ANSI colors
+- Very good VT100 control sequence support - passes [vttest](https://invisible-island.net/vttest) tests for 80-column VT52/VT100/VT102
+- PETSCII mode supports PETSCII character set and control characters, PETSCII (c64) font included
+- Easy to DIY - vast majority of soldering is through-hole
+
+### Limitations
+
+The terminal is powered by a Raspberry Pi Pico. The Pico is a microcontroller and does not have integrated graphics
+capabilities. It can however still produce video signals (see [PicoDVI](https://github.com/Wren6991/PicoDVI) 
+and [PicoVGA](https://github.com/Panda381/PicoVGA)). 
+Some limitations for the terminal arise from the Pico's limited processing power:
+
+- Max 80 columns per row (no 132 column support)
+- Font characters must be 8 pixels wide (original VT100 was 9 pixels)
+- 16 Ansi colors only (no 8-bit or 24-bit color support)
+
 ## Uploading the VersaTerm firmware to the Raspberry Pi Pico
 
 Uploading firmware to the Raspberry Pi Pico is easy:

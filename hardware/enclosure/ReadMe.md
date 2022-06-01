@@ -1,1 +1,1 @@
-![enclosure](pictures/enc_diag1.jpg)
+![enclosure](../pictures/enc_diag1.jpg)

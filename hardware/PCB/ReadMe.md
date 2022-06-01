@@ -1,4 +1,4 @@
-# Parts 
+# Component Ordering
 
 I sourced most of the parts from DigiKey. The [VersaTermBOM.xlsx](VersaTermBOM.xlsx) file in this folder includes all the parts and their part numbers.
 You can also click the link below to automatically create a shopping cart at DigiKey that contains most of the parts:<BR>
@@ -25,8 +25,10 @@ The vast majority of solder points are through-hole and easy to solder, except f
   - When soldering the male Molex connector for the TTL serial connection to the board, do not stick it into the board as far as it will go, otherwise the 
   female connector will not fit afterwards. I recommend soldering the male connector while the female one is plugged in, that way there is definitely enough space.
 
-# Part Placement
+# Component Placement
 
+![Empty Board](../pictures/board_empty.png)
+  
 For supplier and manufacturer part numbers, see [VersaTermBOM.xlsx](VersaTermBOM.xlsx)
 
 Designator	|  Component

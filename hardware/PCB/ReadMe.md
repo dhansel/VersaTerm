@@ -24,3 +24,5 @@ The vast majority of solder points are through-hole and easy to solder, except f
   between the pins after soldering.
   - When soldering the male Molex connector for the TTL serial connection to the board, do not stick it into the board as far as it will go, otherwise the 
   female connector will not fit afterwards. I recommend soldering the male connector while the female one is plugged in, that way there is definitely enough space.
+
+![board_top](../pictures/board_top.jpg)

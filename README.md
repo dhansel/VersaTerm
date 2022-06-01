@@ -1,5 +1,5 @@
 # VersaTerm
-A versatile serial terminal
+A versatile DIY serial terminal.
 
 ![Labeled Board](hardware/pictures/board_labeled.jpg)
 (more pictures [here](hardware/pictures/ReadMe.md))
@@ -17,7 +17,7 @@ A versatile serial terminal
 - Supports 16 ANSI colors
 - Very good VT100 control sequence support - passes [vttest](https://invisible-island.net/vttest) tests for 80-column VT52/VT100/VT102
 - PETSCII mode supports PETSCII character set and control characters, PETSCII (c64) font included
-- Easy to DIY - vast majority of soldering is through-hole
+- Easy to DIY - vast majority of soldering is through-hole, firmware can be uploaded via USB (no special equipment required)
 
 ### Limitations
 

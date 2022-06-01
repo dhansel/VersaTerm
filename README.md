@@ -1,6 +1,8 @@
 # VersaTerm
 A versatile serial terminal
 
+![Labeled Board](hardware/pictures/board_labeled.jpg)
+
 ## Uploading the VersaTerm firmware to the Raspberry Pi Pico
 
 Uploading firmware to the Raspberry Pi Pico is easy:

@@ -2,6 +2,7 @@
 A versatile serial terminal
 
 ![Labeled Board](hardware/pictures/board_labeled.jpg)
+(more pictures [here](hardware/pictures/ReadMe.md))
 
 ## Uploading the VersaTerm firmware to the Raspberry Pi Pico
 

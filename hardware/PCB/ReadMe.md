@@ -5,7 +5,7 @@ You can also click the link below to automatically create a shopping cart at Dig
 https://www.digikey.com/short/d0qw14h1
 
 The the following necessary parts are currently not available at DigiKey and have to be ordered separately:
-  - Raspberry Pi Pico: not sold at DigiKey, available at AdaFruit, part #4883
+  - Raspberry Pi Pico: not sold at DigiKey, available at [AdaFruit](https://www.adafruit.com/product/4883), [SparkFun](https://www.sparkfun.com/products/17829), Ebay and others
   - 2N7000 MOSFET (need 7): currently (May 2022) on backorder at DigiKey. Available on EBay from various sellers.
 
 If you want to use the provided [3d-printable enclosure](../enclosure), you will need four machine screws #4-40 with length 22mm (7/8") below the head and matching

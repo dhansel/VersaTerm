@@ -464,8 +464,8 @@ static const struct MenuItemStruct __in_flash(".configmenus") fontMenu[] =
 
 
 static const struct MenuItemStruct __in_flash(".configmenus") usbMenu[] =
-    {{'1', "USB port mode",  0, NULL, 0, usbtype_fn, &settings.USB.mode,    0, 3, 1, 3, {"Disabled", "Device", "Host", "Auto-detect"}},
-     {'2', "USB CDC device mode", 0, NULL, 0, NULL, &settings.USB.cdcmode, 0, 3, 1, 1, {"Disabled", "Serial", "Pass-through", "Pass-through (terminal disabled)"}}};
+    {{'1', "USB port mode",  0, NULL, 0, usbtype_fn, &settings.USB.mode,   0, 3, 1, 3, {"Disabled", "Device", "Host", "Auto-detect"}},
+     {'2', "USB CDC device mode", 0, NULL, 0, NULL, &settings.USB.cdcmode, 0, 3, 2, 1, {"Disabled", "Serial", "Pass-through", "Pass-through (terminal disabled)"}}};
 
 
 static const struct MenuItemStruct __in_flash(".configmenus") mainMenu[] =
@@ -1429,27 +1429,6 @@ static int INFLASHFUN keyboard_key_mapping_fn(const struct MenuItemStruct *item,
 }
 
 
-static int INFLASHFUN recvChar(int msDelay) 
-{ 
-  absolute_time_t endtime = make_timeout_time_ms(msDelay);
-  while( !time_reached(endtime) )
-    { 
-      if( tuh_inited() ) tuh_task();
-      keyboard_task();
-      if( keyboard_read_keypress()==HID_KEY_ESCAPE ) return -2;
-      if( uart_is_readable(PIN_UART_ID) ) return uart_getc(PIN_UART_ID);
-    }
-
-  return -1; 
-}
-
-
-static void INFLASHFUN sendData(const char *data, int size)
-{
-  uart_write_blocking(PIN_UART_ID, (uint8_t *) data, size);
-}
-
-
 static int xmodem_confignum = 0;
 static uint8_t *xmodem_configdata = NULL;
 
@@ -1616,8 +1595,9 @@ static int INFLASHFUN configs_fn(const struct MenuItemStruct *item, int callType
             {
               xmodem_confignum = i;
               print("\033[?25l\033[%i;5HSending configuration data via XModem protocol...", firstItemRow+14);
-              
-              if( xmodem_transmit(recvChar, sendData, sendConfigDataPacket) )
+
+              while( serial_xmodem_receive_char(10)!=-1 );
+              if( xmodem_transmit(serial_xmodem_receive_char, serial_xmodem_send_data, sendConfigDataPacket) )
                 print("\033[?25l\033[%i;5HSuccessfully sent configuration data. Press any key...", firstItemRow+14);
               else
                 print("\033[?25l\033[%i;5HTransmission of configuration data failed. Press any key...", firstItemRow+14);
@@ -1643,7 +1623,8 @@ static int INFLASHFUN configs_fn(const struct MenuItemStruct *item, int callType
                       print("\033[?25l\033[%i;5HReceiving configuration data via XModem protocol...", firstItemRow+14);
                       print("\r\n");
 
-                      int res = xmodem_receive(recvChar, sendData, receiveConfigDataPacket);
+                      while( serial_xmodem_receive_char(10)!=-1 );
+                      int res = xmodem_receive(serial_xmodem_receive_char, serial_xmodem_send_data, receiveConfigDataPacket);
                       if( res && *((uint32_t *) xmodem_configdata)==CONFIG_MAGIC )
                         {
                           flash_write(i, xmodem_configdata, 4096);

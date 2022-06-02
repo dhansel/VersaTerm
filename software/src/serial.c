@@ -54,3 +54,58 @@ void serial_init()
   serial_uart_init();
   serial_cdc_init();
 }
+
+
+// --------------------------------------------------------------------------------------
+// for XModem data upload and download
+// --------------------------------------------------------------------------------------
+
+#include "tusb.h"
+#include "hardware/uart.h"
+#include "keyboard.h"
+
+
+int __in_flash(".configfun")  serial_xmodem_receive_char(int msDelay)
+{ 
+  absolute_time_t endtime = make_timeout_time_ms(msDelay);
+  while( !time_reached(endtime) )
+    { 
+      if( tuh_inited() ) tuh_task();
+      if( tud_inited() ) tud_task();
+      keyboard_task();
+      if( keyboard_read_keypress()==HID_KEY_ESCAPE ) return -2;
+
+      if( tud_cdc_connected() )
+        {
+          if( tud_cdc_available() ) { char c; tud_cdc_read(&c, 1); return c; }
+        }
+      else
+        {
+          if( uart_is_readable(PIN_UART_ID) ) return uart_getc(PIN_UART_ID);
+        }
+    }
+  
+  return -1; 
+}
+
+
+void __in_flash(".configfun")  serial_xmodem_send_data(const char *data, int size)
+{
+  if( tud_cdc_connected() ) 
+    {
+      while( size>0 )
+        {
+          if( tud_cdc_write_available() )
+            {
+              uint32_t n = tud_cdc_write(data, size);
+              size -= n;
+              data += n;
+            }
+          tud_task();
+        }
+
+      tud_cdc_write_flush();
+    }
+  else
+    uart_write_blocking(PIN_UART_ID, (uint8_t *) data, size);
+}

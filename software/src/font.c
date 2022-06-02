@@ -12,10 +12,9 @@
 #include "font.h"
 #include "flash.h"
 #include "config.h"
-#include "keyboard.h"
 #include "xmodem.h"
 #include "framebuf.h"
-#include "tusb.h"
+#include "serial.h"
 
 #ifndef _IMG_ASSET_SECTION
 #define _IMG_ASSET_SECTION ".data"
@@ -27,6 +26,9 @@
 #include "font_terminus.h"
 #include "font_terminus_bold.h"
 #include "font_petscii.h"
+
+#define INFLASHFUN __in_flash(".configfun") 
+
 
 static const uint8_t builtin_font_graphics_char_mapping[31] =
   {0x04, // diamond/caret
@@ -126,7 +128,7 @@ const uint8_t *font_get_bmpdata(uint8_t fontNum)
 }
 
 
-bool font_get_font_info(uint8_t fontNum, uint32_t *bitmapWidth, uint32_t *bitmapHeight, uint8_t *charHeight, uint8_t *underlineRow)
+bool INFLASHFUN font_get_font_info(uint8_t fontNum, uint32_t *bitmapWidth, uint32_t *bitmapHeight, uint8_t *charHeight, uint8_t *underlineRow)
 {
   bool ok = true;
   uint8_t ch=0, ur=0;
@@ -176,7 +178,7 @@ bool font_get_font_info(uint8_t fontNum, uint32_t *bitmapWidth, uint32_t *bitmap
 }
 
 
-const char *font_get_name(uint8_t fontNum)
+const INFLASHFUN char *font_get_name(uint8_t fontNum)
 {
   switch( fontNum )
     {
@@ -196,7 +198,7 @@ const char *font_get_name(uint8_t fontNum)
 }
 
 
-void font_set_name(uint8_t fontNum, const char *name)
+void INFLASHFUN font_set_name(uint8_t fontNum, const char *name)
 {
   if( fontNum>=FONT_ID_USER1 && fontNum<=FONT_ID_USER4 )
     {
@@ -207,7 +209,7 @@ void font_set_name(uint8_t fontNum, const char *name)
 }
 
 
-const uint8_t font_map_graphics_char(uint8_t c, bool boldFont)
+const INFLASHFUN uint8_t font_map_graphics_char(uint8_t c, bool boldFont)
 {
   if( c>=96 && c<=126 )
     {
@@ -223,7 +225,7 @@ const uint8_t font_map_graphics_char(uint8_t c, bool boldFont)
 }
 
 
-const uint8_t *font_get_graphics_char_mapping(uint8_t fontNum)
+const INFLASHFUN uint8_t *font_get_graphics_char_mapping(uint8_t fontNum)
 {
   if( fontNum<FONT_ID_USER1 )
     return builtin_font_graphics_char_mapping;
@@ -234,7 +236,7 @@ const uint8_t *font_get_graphics_char_mapping(uint8_t fontNum)
 }
 
 
-bool font_set_graphics_char_mapping(uint8_t fontNum, const uint8_t *mapping)
+bool INFLASHFUN font_set_graphics_char_mapping(uint8_t fontNum, const uint8_t *mapping)
 {
   if( fontNum>=FONT_ID_USER1 && fontNum<=FONT_ID_USER4 && memcmp(userFontInfo[fontNum-FONT_ID_USER1].graphicsCharMapping, mapping, 31)!=0 )
     {
@@ -247,7 +249,7 @@ bool font_set_graphics_char_mapping(uint8_t fontNum, const uint8_t *mapping)
 }
 
 
-void font_set_underline_row(uint8_t fontNum, uint8_t underlineRow)
+void INFLASHFUN font_set_underline_row(uint8_t fontNum, uint8_t underlineRow)
 {
   if( fontNum>=FONT_ID_USER1 && fontNum<=FONT_ID_USER4 && userFontInfo[fontNum-FONT_ID_USER1].underlineRow!=underlineRow )
     {
@@ -265,7 +267,7 @@ static uint32_t byteCounter, bitmapWidth, bitmapHeight, fontBaseAddr, fontCharHe
 static const char *error = NULL;
 
 
-bool receiveFontDataPacket(unsigned long no, char* charData, int size)
+bool INFLASHFUN receiveFontDataPacket(unsigned long no, char* charData, int size)
 {
   static uint8_t dataPage[256];
   uint8_t *data = (uint8_t *) charData;
@@ -351,28 +353,7 @@ bool receiveFontDataPacket(unsigned long no, char* charData, int size)
 }
 
 
-int recvChar(int msDelay) 
-{ 
-  absolute_time_t endtime = make_timeout_time_ms(msDelay);
-  while( !time_reached(endtime) )
-    { 
-      if( tuh_inited() ) tuh_task();
-      keyboard_task();
-      if( keyboard_read_keypress()==HID_KEY_ESCAPE ) return -2;
-      if( uart_is_readable(PIN_UART_ID) ) return uart_getc(PIN_UART_ID);
-    }
-
-  return -1; 
-}
-
-
-void sendData(const char *data, int size)
-{
-  uart_write_blocking(PIN_UART_ID, (uint8_t *) data, size);
-}
-
-
-const char *font_receive_fontdata(uint8_t userFontNum)
+const char *INFLASHFUN font_receive_fontdata(uint8_t userFontNum)
 {
   state = 0;
   error = NULL;
@@ -380,7 +361,8 @@ const char *font_receive_fontdata(uint8_t userFontNum)
     {
       fontBaseAddr = flash_get_write_offset(userFontNum+12);
 
-      if( !xmodem_receive(recvChar, sendData, receiveFontDataPacket) )
+      while( serial_xmodem_receive_char(10)!=-1 );
+      if( !xmodem_receive(serial_xmodem_receive_char, serial_xmodem_send_data, receiveFontDataPacket) )
         error = "Transmission failed or canceled";
       else if( error==NULL )
         {
@@ -401,7 +383,7 @@ const char *font_receive_fontdata(uint8_t userFontNum)
 // -----------------------------------------------------------------------------------------------------------------
 
 
-static uint8_t reverse_bits(uint8_t b)
+static uint8_t INFLASHFUN reverse_bits(uint8_t b)
 {
   uint8_t res = 0;
   for(int i=0; i<8; i++)
@@ -415,7 +397,7 @@ static uint8_t reverse_bits(uint8_t b)
 }
 
 
-static bool set_font_data(uint32_t font_offset, uint32_t bitmapWidth, uint32_t bitmapHeight, uint8_t charHeight, uint8_t underlineRow, const uint8_t *bitmapData)
+static bool INFLASHFUN set_font_data(uint32_t font_offset, uint32_t bitmapWidth, uint32_t bitmapHeight, uint8_t charHeight, uint8_t underlineRow, const uint8_t *bitmapData)
 {
   if( (bitmapWidth * bitmapHeight) == (2048*charHeight) && bitmapData!=NULL && charHeight>0 )
     {
@@ -446,7 +428,7 @@ static bool set_font_data(uint32_t font_offset, uint32_t bitmapWidth, uint32_t b
 }
 
 
-bool font_apply_font(uint8_t font, bool bold)
+bool INFLASHFUN font_apply_font(uint8_t font, bool bold)
 {
   bool res = false;
   uint8_t charHeight, underlineRow;
@@ -477,7 +459,7 @@ bool font_apply_font(uint8_t font, bool bold)
 }
 
 
-void font_apply_settings()
+void INFLASHFUN font_apply_settings()
 {
   uint8_t fn = config_get_screen_font_normal();
   uint8_t fb = config_get_screen_font_bold();
@@ -489,7 +471,7 @@ void font_apply_settings()
 }
 
 
-void font_init()
+void INFLASHFUN font_init()
 {
   flash_read(11, userFontInfo, sizeof(userFontInfo));
   bool modified = false;

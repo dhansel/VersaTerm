@@ -12,11 +12,11 @@ A versatile DIY serial terminal.
 - RS232 and TTL level serial input/output (TTL switchable between 3.3V and 5V)
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
 - Can be powered via USB or 7-28V DC
-- Highly configurable, including user-uploadable fonts
+- [Highly configurable](software/screenshots/ReadMe.md), including user-uploadable fonts
 - Supports all VT100 attributes: bold/underline/blink/inverse
 - Supports 16 ANSI colors
 - Very good VT100 control sequence support - passes [vttest](https://invisible-island.net/vttest) tests for 80-column VT52/VT100/VT102
-- PETSCII mode supports PETSCII character set and control characters, PETSCII (c64) font included
+- [PETSCII mode](software/screenshots/ReadMe.md#PETSCII) supports PETSCII character set and control characters, PETSCII (c64) font included
 - Easy to DIY - vast majority of soldering is through-hole, firmware can be uploaded via USB (no special equipment required)
 
 ### Limitations

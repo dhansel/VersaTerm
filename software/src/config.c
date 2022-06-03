@@ -465,7 +465,7 @@ static const struct MenuItemStruct __in_flash(".configmenus") fontMenu[] =
 
 static const struct MenuItemStruct __in_flash(".configmenus") usbMenu[] =
     {{'1', "USB port mode",  0, NULL, 0, usbtype_fn, &settings.USB.mode,   0, 3, 1, 3, {"Disabled", "Device", "Host", "Auto-detect"}},
-     {'2', "USB CDC device mode", 0, NULL, 0, NULL, &settings.USB.cdcmode, 0, 3, 2, 1, {"Disabled", "Serial", "Pass-through", "Pass-through (terminal disabled)"}}};
+     {'2', "USB CDC device mode", 0, NULL, 0, NULL, &settings.USB.cdcmode, 0, 3, 1, 2, {"Disabled", "Serial", "Pass-through", "Pass-through (terminal disabled)"}}};
 
 
 static const struct MenuItemStruct __in_flash(".configmenus") mainMenu[] =

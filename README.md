@@ -10,6 +10,7 @@ A versatile DIY serial terminal.
 - Native HDMI and VGA video output (no conversion)
 - Supports PS/2 and USB keyboards (including keyboards with integrated USB hubs)
 - RS232 and TTL level serial input/output (TTL switchable between 3.3V and 5V)
+- Wide range of baud rates: 50-921600 baud (presets and custom)
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
 - Can be powered via USB or 7-28V DC
 - [Highly configurable](software/screenshots/ReadMe.md), including user-uploadable fonts

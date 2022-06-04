@@ -13,11 +13,11 @@ A versatile DIY serial terminal.
 - Wide range of baud rates: 50-921600 baud (presets and custom)
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
 - Can be powered via USB or 7-28V DC
-- [Highly configurable](software/screenshots/ReadMe.md), including user-uploadable fonts
+- [Highly configurable](software/screenshots/settings.md), including user-uploadable fonts
 - Supports all VT100 attributes: bold/underline/blink/inverse
 - Supports 16 ANSI colors
-- Very good VT100 control sequence support - passes [vttest](https://invisible-island.net/vttest) tests for 80-column VT52/VT100/VT102
-- [PETSCII mode](software/screenshots/ReadMe.md#PETSCII) supports PETSCII character set and control characters, PETSCII (c64) font included
+- Good [VT100 control sequence support](software/screenshots/vttest.md) - passes VTTest tests for 80-column VT52/VT100/VT102
+- [PETSCII mode](software/screenshots/petscii.md) supports PETSCII character set and control characters, PETSCII (c64) font included
 - Easy to DIY - vast majority of soldering is through-hole, firmware can be uploaded via USB (no special equipment required)
 
 ### Limitations

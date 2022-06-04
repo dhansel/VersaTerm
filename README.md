@@ -38,7 +38,7 @@ This is not a kit but building VersaTerm should be fairly easy:
 
 - The Gerber file to produce the PCB is available [here](https://github.com/dhansel/VersaTerm/raw/main/hardware/PCB/VersaTermGerber.zip)
 - See [here](hardware/PCB/ReadMe.md) for component sourcing and assembly tips
-- STL files for an enclosure can be found [here](hardware/enclosure)
+- STL files for 3d printing an enclosure can be found [here](hardware/enclosure)
 - Instructions on how to upload the firmware (simple USB connection) are [here](software/ReadMe.md)
 
 ## Screen Shots

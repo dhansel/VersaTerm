@@ -35,7 +35,7 @@ static int scroll_region_start, scroll_region_end;
 static bool cursor_shown = true, origin_mode = false, cursor_eol = false, auto_wrap_mode = true, vt52_mode = false, localecho = false;
 static bool saved_eol = false, saved_origin_mode = false, insert_mode = false;
 static bool petscii_lower_case_charset = true;
-static uint8_t saved_attr, saved_fg, saved_bg, saved_charset, charset, charset_G0, charset_G1, tabs[255];
+static uint8_t saved_attr, saved_fg, saved_bg, *saved_charset, *charset, charset_G0, charset_G1, tabs[255];
 
 
 static uint8_t INFLASHFUN get_charset(char c)
@@ -149,9 +149,9 @@ static void INFLASHFUN print_char_vt(char c)
       framebuf_insert(cursor_col, cursor_row, 1, color_fg, color_bg);
     }
 
-  if( charset==CS_TEXT_UK && c==35 )
+  if( *charset==CS_TEXT_UK && c==35 )
     c=font_map_graphics_char(125, (attr & ATTR_BOLD)!=0); // pound sterling symbol
-  else if( charset==CS_GRAPHICS )
+  else if( *charset==CS_GRAPHICS )
     c=font_map_graphics_char(c, (attr & ATTR_BOLD)!=0);
   
   framebuf_set_color(cursor_col, cursor_row, color_fg, color_bg);
@@ -200,7 +200,7 @@ void INFLASHFUN terminal_reset()
   saved_attr = 0;
   charset_G0 = CS_TEXT_US;
   charset_G1 = CS_GRAPHICS;
-  charset = charset_G0;
+  charset = &charset_G0;
   memset(tabs, 0, framebuf_get_ncols(-1));
   framebuf_set_scroll_delay(0);
   localecho = config_get_terminal_localecho();
@@ -295,11 +295,11 @@ static INFLASHFUN void terminal_process_text(char c)
       }
 
     case 14:  // SO
-      charset = charset_G1; 
+      charset = &charset_G1; 
       break;
 
     case 15:  // SI
-      charset = charset_G0; 
+      charset = &charset_G0; 
       break;
 
     default: // regular character
@@ -369,12 +369,12 @@ static void INFLASHFUN terminal_process_command(char start_char, char final_char
       switch( params[0] )
         {
         case 0:
-          for(int i=0; i<cursor_row; i++) framebuf_set_row_attr(i, 0);
+          for(int i=cursor_row; i<framebuf_get_nrows(); i++) framebuf_set_row_attr(i, 0);
           framebuf_fill_region(cursor_col, cursor_row, framebuf_get_ncols(cursor_row)-1, framebuf_get_nrows()-1, ' ', color_fg, color_bg);
           break;
           
         case 1:
-          for(int i=cursor_row+1; i<framebuf_get_nrows(); i++) framebuf_set_row_attr(i, 0);
+          for(int i=0; i<cursor_row; i++) framebuf_set_row_attr(i, 0);
           framebuf_fill_region(0, 0, cursor_col, cursor_row, ' ', color_fg, color_bg);
           break;
           
@@ -628,7 +628,7 @@ void INFLASHFUN terminal_receive_char_vt102(char c)
 
   if( terminal_state!=TS_NORMAL )
     {
-      if( (c==8 || c==13) )
+      if( c==8 || c==10 || c==13 )
         {
           // processe some cursor control characters within escape sequences
           // (otherwise we fail "vttest" cursor control tests)

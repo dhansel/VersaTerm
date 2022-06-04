@@ -1,0 +1,32 @@
+﻿Designator,Component,Quantity,Supplier,Supplier Part,Manufacturer,Manufacturer Part
+"R21,R24",Resistor 100 Ohm,2,Digi-Key,CF14JT100RCT-ND,Stackpole Electronics Inc,CF14JT100R
+"R1,R2,R3,R4,R5,R6,R7,R8",Resistor 270 Ohm,8,Digi-Key,CF14JT270RCT-ND,Stackpole Electronics Inc,CF14JT270R
+R14,Resistor 390 Ohm,1,Digi-Key,CF14JT390RCT-ND,Stackpole Electronics Inc,CF14JT390R
+"R17,R20,R25,R26",Resistor 470 Ohm,4,Digi-Key,CF14JT470RCT-ND,Stackpole Electronics Inc,CF14JT470R
+"R13,R16,R19,R27,R28,R29,R30",Resistor 1k,7,Digi-Key,CF14JT1K00CT-ND,Stackpole Electronics Inc,CF14JT1K00
+"R15,R18",Resistor 2k2,2,Digi-Key,CF14JT2K20CT-ND,Stackpole Electronics Inc,CF14JT2K20
+R22,Resistor 4.7k,1,Digi-Key,CF14JT4K70CT-ND,Stackpole Electronics Inc,CF14JT4K70
+"R9,R10,R11,R12,R23",Resistor 10k,5,Digi-Key,CF14JT10K0CT-ND,Stackpole Electronics Inc,CF14JT10K0
+"D1,D2",Diode SMT Schottky,2,Digi-Key,641-1762-1-ND,Comchip Technology,CDBA140SL-HF
+"D3,D4,D5,D6,D7",Diode Axial 1N4148,5,Digi-Key,1N4148FS-ND,Onsemi,1N4148
+"Q1,Q2,Q3,Q4,Q5,Q6,Q7",MOSFET 2N7000,7,Digi-Key,2N7000FS-ND,Onsemi,2N7000
+"C1,C2",Capacitor 10uF,2,Digi-Key,399-18279-1-ND,KEMET,ESS106M063AE2EA
+3.3V / 5V,Switch,1,Digi-Key,EG1906-ND,E-Switch,EG1213
+"RESET,DEFAULTS",Button,2,Digi-Key,CKN9120-ND,C&K,PTS645VH58-2 LFS
+REG1,Recom 5V Regulator,1,Digi-Key,945-2201-ND,Recom Power,R-78E5.0-1.0
+SG1,Buzzer,1,Digi-Key,668-1470-ND,"PUI Audio, Inc.",AT-1224-TWT-5V-2-R
+Power,Barrel Connector,1,Digi-Key,A107788-ND,TE Connectivity AMP Connectors,1734510-1
+Power,USB-B Mini Connector,1,Digi-Key,CP-002A-ND,CUI Devices,PJ-002A
+VGA,DB15 Connector,1,Digi-Key,2092-K66X-E15S-N-VESA-ND,"Kycon, Inc.",K66X-E15S-N-VESA
+PS/2,PS/2 Connector,1,Digi-Key,CP-2260-ND,CUI Devices,MD-60SM
+HDMI,HDMI Connector,1,Digi-Key,1175-1700-ND,CNC Tech,2000-1-1-20-00-BK
+USB,USB-A Connector,1,Digi-Key,ED2989-ND,On Shore Technology Inc.,USB-A1HSW6
+RS232,DB9 Connector,1,Digi-Key,AE10968-ND,Assmann WSW Components,A-DS 09 A/KG-T2S
+TTL Serial,Molex Connector Male,1,Digi-Key,A1928-ND,TE Connectivity AMP Connectors,640457-6
+U1,Raspberry Pi Pico,1,AdaFruit,4883,Raspberry Pi,SC0915
+U3,MAX3232 board,1,Digi-Key,1568-1208-ND,SparkFun,BOB-11189
+,Header Male 40 Pin,2,Digi-Key,732-5334-ND,Würth Elektronik,61304011121
+,Header Female 40 Pin,2,Digi-Key,HDR100IMP40F-G-V-TH-ND,Chip Quik Inc.,HDR100IMP40F-G-V-TH
+,D-Sub Jackscrew,2,Digi-Key,2057-JS-02-ND,Adam Tech,JS-02
+,Molex Housing Female,4,Digi-Key,A99617-ND,TE Connectivity AMP Connectors,1375820-6
+,Molex Crimp Pins,25,Digi-Key,A100453CT-ND,TE Connectivity AMP Connectors,1375819-1 

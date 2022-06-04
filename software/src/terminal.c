@@ -327,8 +327,8 @@ static void INFLASHFUN terminal_process_command(char start_char, char final_char
               terminal_clear_screen();
               break;
 
-            case 4: // smooth scroll
-              framebuf_set_scroll_delay(enabled ? (1000/6) : 0);
+            case 4: // enable smooth scrolling (emulated via scroll delay)
+              framebuf_set_scroll_delay(enabled ? config_get_terminal_scrolldelay() : 0);
               break;
               
             case 5: // invert screen

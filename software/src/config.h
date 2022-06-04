@@ -47,6 +47,7 @@ uint8_t config_get_terminal_bs();
 uint8_t config_get_terminal_del();
 bool    config_get_terminal_clearBit7();
 bool    config_get_terminal_uppercase();
+uint16_t config_get_terminal_scrolldelay();
 uint8_t config_get_terminal_default_fg();
 uint8_t config_get_terminal_default_bg();
 uint8_t config_get_terminal_default_attr();

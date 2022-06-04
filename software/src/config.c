@@ -159,7 +159,8 @@ struct SettingsStruct
     uint16_t bgcolor;
     uint16_t attr;
     char     answerback[50];
-    uint16_t reserved[32];
+    uint16_t scrolldelay;
+    uint16_t reserved[31];
   } Terminal;
 
   struct KeyboardStruct
@@ -370,10 +371,11 @@ static const struct MenuItemStruct __in_flash(".configmenus") terminalMenu[] =
      {'7', "Send all uppercase",       0, NULL, 0, NULL, &settings.Terminal.uppercase,  0, 1, 1, 0, {"off", "on"}},
      {'8', "Local echo",               0, NULL, 0, NULL, &settings.Terminal.echo,       0, 1, 1, 0, {"off", "on"}},
      {'9', "Cursor shape",             0, NULL, 0, NULL, &settings.Terminal.cursor,     0, 2, 1, 0, {"static box", "blinking box", "underline"}},
-     {'a', "Default background color", 0, NULL, 0, color16_fn, &settings.Terminal.bgcolor, 0, 15, 1,  0},
-     {'b', "Default text color",       0, NULL, 0, color16_fn, &settings.Terminal.fgcolor, 0, 15, 1,  7},
-     {'c', "Default text attributes",  0, NULL, 0, attr_fn,    &settings.Terminal.attr,    0, 15, 1,  0},
-     {'d', "Answerback message",       0, NULL, 0, answerback_fn}};
+     {'a', "Smooth scroll delay (ms)", 0, NULL, 0, NULL, &settings.Terminal.scrolldelay, 0, 1000, 10, 170},
+     {'b', "Default background color", 0, NULL, 0, color16_fn, &settings.Terminal.bgcolor, 0, 15, 1,  0},
+     {'c', "Default text color",       0, NULL, 0, color16_fn, &settings.Terminal.fgcolor, 0, 15, 1,  7},
+     {'d', "Default text attributes",  0, NULL, 0, attr_fn,    &settings.Terminal.attr,    0, 15, 1,  0},
+     {'e', "Answerback message",       0, NULL, 0, answerback_fn}};
 
 
 
@@ -608,6 +610,11 @@ bool config_get_terminal_clearBit7()
 bool config_get_terminal_uppercase()
 {
   return settings.Terminal.uppercase!=0;
+}
+
+uint16_t config_get_terminal_scrolldelay()
+{
+  return settings.Terminal.scrolldelay;
 }
 
 uint8_t config_get_terminal_default_fg()

@@ -1,19 +1,20 @@
 # Settings menu
 
+[Click here for more settings screen shots](settings.md)
 ![settings](settings.jpg)
-![settings_serial](settings_serial.jpg)
-![settings_terminal](settings_terminal.jpg)
-![settings_keyboard](settings_keyboard.jpg)
-![settings_screen](settings_screen.jpg)
-![settings_screen_font](settings_screen_font.jpg)
-![settings_screen_font_user](settings_screen_font_user.jpg)
-![settings_bell](settings_bell.jpg)
-![settings_usb](settings_usb.jpg)
-![settings_configs](settings_configs.jpg)
 
-# PETSCII
+# VT100/ASCII graphics
 
+[Click here for more VT100 graphics screen shots](vt100.md)
+![ttest](ttest_bold.jpg)
+
+# VTTest
+
+[VTTest](https://invisible-island.net/vttest) is a test suite for VT100 compatibility.
+[Click here for more VTTest screen shots](vttest.md)
+![vttest](vttest_cursor1.jpg)
+
+# PETSCII graphics
+
+[Click here for more PETSCII graphics screen shots](petscii.md)
 ![petscii_retroacademy](petscii_retroacademy.jpg)
-![petscii_art1](petscii_art1.jpg)
-![petscii_art2](petscii_art2.jpg)
-![petscii_art3](petscii_art3.jpg)

@@ -7,7 +7,7 @@
 
 # VTTest
 
-[VTTest](https://invisible-island.net/vttest) is a test suite for VT100 compatibility.
+[VTTest](https://invisible-island.net/vttest) is a test suite for VT100 compatibility.<br>
 [Click here for more VTTest screen shots](vttest.md)
 <div align="center">
   <a href="vttest.md"><img src="vttest_cursor1.jpg" alt="More screenshots"></a>

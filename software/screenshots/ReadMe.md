@@ -1,8 +1,3 @@
-# Settings menu
-
-[Click here for more settings screen shots](settings.md)
-![settings](settings.jpg)
-
 # VT100/ASCII graphics
 
 [Click here for more VT100 graphics screen shots](vt100.md)
@@ -18,3 +13,8 @@
 
 [Click here for more PETSCII graphics screen shots](petscii.md)
 ![petscii_retroacademy](petscii_retroacademy.jpg)
+
+# Settings menu
+
+[Click here for more settings screen shots](settings.md)
+![settings](settings.jpg)

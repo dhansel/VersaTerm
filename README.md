@@ -13,7 +13,7 @@ A versatile DIY serial terminal.
 - Wide range of baud rates: 50-921600 baud (presets and custom)
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
 - Can be powered via USB or 7-28V DC
-- [Highly configurable](software/screenshots/settings.md), including user-uploadable fonts
+- [Highly configurable](software/screenshots/settings.md), including user-uploadable fonts (bitmaps)
 - Supports all VT100 attributes: bold/underline/blink/inverse
 - Supports 16 ANSI colors
 - Good [VT100 control sequence support](software/screenshots/vttest.md) - passes VTTest tests for 80-column VT52/VT100/VT102
@@ -28,8 +28,9 @@ and [PicoVGA](https://github.com/Panda381/PicoVGA)).
 Some limitations for the terminal arise from the Pico's limited processing power:
 
 - Max 80 columns per row (no 132 column support)
-- Font characters must be 8 pixels wide (original VT100 was 9 pixels)
+- Font characters must be 8 pixels wide (original VT100 was 10 pixels), height can be 8-16 pixels
 - 16 Ansi colors only (no 8-bit or 24-bit color support)
+- No smooth scrolling (emulated via delayed scrolling)
 
 ## Uploading the VersaTerm firmware to the Raspberry Pi Pico
 

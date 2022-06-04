@@ -1,6 +1,6 @@
 # Component Ordering
 
-I sourced most of the parts from DigiKey. The [VersaTermBOM.xlsx](VersaTermBOM.xlsx) file in this folder includes all the parts and their part numbers.
+I sourced most of the parts from DigiKey. The [VersaTermBOM.csv](VersaTermBOM.csv) file in this folder includes all the parts and their part numbers.
 You can also click the link below to automatically create a shopping cart at DigiKey that contains most of the parts:<BR>
 https://www.digikey.com/short/d0qw14h1
 
@@ -29,7 +29,7 @@ The vast majority of solder points are through-hole and easy to solder, except f
 
 ![Empty Board](../pictures/board_empty.png)
   
-For supplier and manufacturer part numbers, see [VersaTermBOM.xlsx](VersaTermBOM.xlsx)
+For supplier and manufacturer part numbers, see [VersaTermBOM.csv](VersaTermBOM.csv)
 
 Designator	|  Component
 ------------|-------------

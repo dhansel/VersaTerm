@@ -14,10 +14,10 @@ A versatile DIY serial terminal.
 - Supports hardware (RTS/CTS) and software (XOn/XOff) flow control
 - Can be powered via USB or 7-28V DC
 - [Highly configurable](software/screenshots/settings.md), including user-uploadable fonts (bitmaps)
-- Supports all VT100 attributes: bold/underline/blink/inverse
-- Supports 16 ANSI colors
-- Good [VT100 control sequence support](software/screenshots/vttest.md) - passes VTTest tests for 80-column VT52/VT100/VT102
-- [PETSCII mode](software/screenshots/petscii.md) supports PETSCII character set and control characters, PETSCII (c64) font included
+- Supports all [VT100 attributes](software/screenshots/vt100.md): bold/underline/blink/inverse
+- Supports [16 ANSI colors](software/screenshots/vt100.md#ANSI-Colors)
+- Decent VT100 control sequence support - [passes VTTest tests](software/screenshots/vttest.md) for 80-column VT52/VT100/VT102
+- [PETSCII mode](software/screenshots/petscii.md) supports PETSCII character set and control characters, PETSCII (C64) font included
 - Easy to DIY - vast majority of soldering is through-hole, firmware can be uploaded via USB (no special equipment required)
 
 ### Limitations

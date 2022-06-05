@@ -54,7 +54,7 @@ static int scroll_region_start, scroll_region_end;
 static bool cursor_shown = true, origin_mode = false, cursor_eol = false, auto_wrap_mode = true, vt52_mode = false, localecho = false;
 static bool saved_eol = false, saved_origin_mode = false, insert_mode = false;
 static bool petscii_lower_case_charset = true;
-static uint8_t saved_attr, saved_fg, saved_bg, *saved_charset, *charset, charset_G0, charset_G1, tabs[255];
+static uint8_t saved_attr, saved_fg, saved_bg, saved_charset_G0, saved_charset_G1, *charset, charset_G0, charset_G1, tabs[255];
 
 
 static uint8_t INFLASHFUN get_charset(char c)
@@ -219,6 +219,8 @@ void INFLASHFUN terminal_reset()
   saved_attr = 0;
   charset_G0 = CS_TEXT_US;
   charset_G1 = CS_GRAPHICS;
+  saved_charset_G0 = CS_TEXT_US;
+  saved_charset_G1 = CS_GRAPHICS;
   charset = &charset_G0;
   memset(tabs, 0, framebuf_get_ncols(-1));
   framebuf_set_scroll_delay(0);
@@ -599,7 +601,8 @@ static void INFLASHFUN terminal_process_command(char start_char, char final_char
       saved_fg  = color_fg;
       saved_bg  = color_bg;
       saved_attr = attr;
-      saved_charset = charset;
+      saved_charset_G0 = charset_G0;
+      saved_charset_G1 = charset_G1;
     }
   else if( final_char=='u' )
     {
@@ -609,7 +612,8 @@ static void INFLASHFUN terminal_process_command(char start_char, char final_char
       color_fg = saved_fg;
       color_bg = saved_bg;
       attr = saved_attr;
-      charset = saved_charset;
+      charset_G0 = saved_charset_G0;
+      charset_G1 = saved_charset_G1;
     }
   else if( final_char=='c' )
     {

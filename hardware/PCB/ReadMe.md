@@ -21,7 +21,7 @@ The vast majority of solder points are through-hole and easy to solder, except f
   - The Raspberry Pi Pico does not route the USB data signals to its pin headers. However, there are two test points (TP2 and TP3) on the bottom of the Pi Pico 
   on which the USB data signals can be accessed. Solder in a short wire from TP2 on the Pi Pico board to TP2 on the VersaTerm PCB. Same for TP3.
   <div align="center">
-  <a href="../pictures/RPiPicoBottom.jpg"><img src="../pictures/RPiPicoBottom.png" width="400"></a>
+  <a href="../pictures/RPiPicoBottom.png"><img src="../pictures/RPiPicoBottom.png" width="400"></a>
   <a href="../pictures/USB_wire.jpg"><img src="../pictures/USB_wire.jpg" width="400"></a>
   </div>
   

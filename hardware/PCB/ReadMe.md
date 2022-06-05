@@ -20,6 +20,11 @@ The vast majority of solder points are through-hole and easy to solder, except f
   - I also used male/female headers to connect the Max3232
   - The Raspberry Pi Pico does not route the USB data signals to its pin headers. However, there are two test points (TP2 and TP3) on the bottom of the Pi Pico 
   on which the USB data signals can be accessed. Solder in a short wire from TP2 on the Pi Pico board to TP2 on the VersaTerm PCB. Same for TP3.
+  <div align="center">
+  <a href="../pictures/RPiPicoBottom.jpg"><img src="../pictures/RPiPicoBottom.png" width="400"></a>
+  <a href="../pictures/USB_wire.jpg"><img src="../pictures/USB_wire.jpg" width="400"></a>
+  </div>
+  
   - While the HDMI connector is through-hole, its pins are very closely spaced. I definitely recommend using a multimeter to check there are no solder bridges 
   between the pins after soldering.
   - When soldering the male Molex connector for the TTL serial connection to the board, do not stick it into the board as far as it will go, otherwise the 

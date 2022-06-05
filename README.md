@@ -41,6 +41,49 @@ This is not a kit but building VersaTerm should be fairly easy:
 - STL files for 3d printing an enclosure can be found [here](hardware/enclosure)
 - Instructions on how to upload the firmware binary (via USB micro cable, no extra hardware needed) are [here](software/ReadMe.md)
 
+## Using VersaTerm
+
+### Settings menu and multiple configurations.
+
+The settings menu can be entered by pressing the F12 keyboard key and navigated
+using the cursor keys.
+
+The "Manage Configurations" sub-menu provides 10 slots to save configurations
+(e.g. if you want to use VersTerm with different computers).
+- To save the current settings to the selected cofiguration slot, press "S"
+- To make the selected configuration slot the startup default, press "*"
+- To give the selected configuration slot a name, press "N"
+
+You can switch between configurations via either of these methods:
+- On startup or RESET, hold down the F1-F10 keyboard keys to select a configuration
+- While VersaTerm is on, press CTRL and F1-F10 to load a configuration
+- Press CTRL+F12 to open a quick-select menu that shows your configurations and their names
+
+### Video output selection (HDMI/VGA)
+
+VersaTerm can produce either VGA or HDMI output but not both at the same time. On startup, VersaTerm detects whether
+a HDMI monitor is connected (via the HDMI "Hot Plug Detect" signal pin). If a HDMI monitor is detected then HDMI
+output is produced, otherwise VGA. You can disable auto-detect and directly specify the output type in the "Screen"
+settings menu. If your HDMI monitor is not detected at all, the HDMI output can be forced by doing the following:
+
+- Connect a keyboard
+- Hold down the RESET and DEFAULTS buttons on the side of the VersaTerm PCB
+- Hold down the CTRL key on the keyboard
+- Release RESET
+
+Doing so will use default settings but disable auto-detect and instead force HDMI output. 
+Once you have a monitor image you can enter settings,  fix the output type to HDMI and save 
+the settings so HDMI is always used automatically.
+
+### Resetting the terminal
+
+The terminal can be reset by pressing the RESET button on the side of the PCB. 
+
+If you get yourself into a situation where VersaTerm will not work because of invalid default settings
+(e.g. set to force HDMI output but you only have a VGA monitor), hold down the DEFAULTS button
+(next to RESET) on the side of the PCB while pressing and releasing RESET. This will re-start
+VersaTerm with the default settings.
+
 ## Screen Shots
 
 See [here](software/screenshots/ReadMe.md) for some demonstrations of VersaTerm's capabilities

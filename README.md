@@ -75,6 +75,23 @@ Doing so will use default settings but disable auto-detect and instead force HDM
 Once you have a monitor image you can enter settings,  fix the output type to HDMI and save 
 the settings so HDMI is always used automatically.
 
+### USB mode
+
+The Raspberry Pi Pico has only one USB port which can function either as a USB host or device.
+If the Pico is connected to another computer using the USB micro socket on the Pico board then
+VersaTerm will detect that at startup and run the USB port as a device. Otherwise it assumes
+that the USB port should be run as a host and allow a USB keyboard to be connected.
+
+Do not connect the Pico to another computer **and** plug in a USB keyboard at the same time. 
+Doing so won't break anything but the USB port won't function properly.
+
+If the USB port is plugged into another computer (i.e. used as a device) then VersaTerm should
+be recognized by the computer as a USB CDC (serial) device. In that case there are three operating
+modes that can be selected in the USB settings menu:
+- *Serial.* In this mode VersaTerm views the USB connection as a secondary serial connection. Any data received is treated just the same as data received on the main serial connection and keypresses are sent to both the main and the USB connection.
+- *Feed-through.* In this mode (which is the default) VersaTerm forwards any data received on the main serial connection to USB and vice versa. This way VersaTerm can be used as a USB-to-serial converter.
+- *Feed-through (terminal disabled).* Similar to the basic feed-through mode but VersaTerm won't process any input it receives from the main serial connection. This can be used to transfer (binary) data between the main serial connection and the USB serial connection without messing up the terminal display.
+
 ### Resetting the terminal
 
 The terminal can be reset by pressing the RESET button on the side of the PCB. 

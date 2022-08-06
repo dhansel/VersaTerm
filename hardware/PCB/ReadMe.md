@@ -15,9 +15,6 @@ If you want to use the provided [3d-printable enclosure](../enclosure), you will
   
 The vast majority of solder points are through-hole and easy to solder, except for the following:
   - Diodes D1 and D2 are surface-mount devices but the diodes themselves are fairly large. I have no SMD soldering experience and had no problem soldering them.
-  - For the Raspberry Pi Pico, solder female header pins onto the PCB and then male header pins to the Pi Pico. That will make it easier to debug issues later 
-  or to replace the Pico if that becomes necessary.
-  - I also used male/female headers to connect the Max3232
   - The Raspberry Pi Pico does not route the USB data signals to its pin headers. However, there are two test points (TP2 and TP3) on the bottom of the Pi Pico 
   on which the USB data signals can be accessed. Solder in a short wire from TP2 on the Pi Pico board to TP2 on the VersaTerm PCB. Same for TP3.
   <div align="center">
@@ -27,8 +24,13 @@ The vast majority of solder points are through-hole and easy to solder, except f
   
   - While the HDMI connector is through-hole, its pins are very closely spaced. I definitely recommend using a multimeter to check there are no solder bridges 
   between the pins after soldering.
+  
+  Other tips:
+  - For the Raspberry Pi Pico, solder female header pins onto the PCB and then male header pins to the Pi Pico. That will make it easier to debug issues later 
+  or to replace the Pico if that becomes necessary.
+  - I also used male/female headers to connect the Max3232
   - When soldering the male Molex connector for the TTL serial connection to the board, do not stick it into the board as far as it will go, otherwise the 
-  female connector will not fit afterwards. I recommend soldering the male connector while the female one is plugged in, that way there is definitely enough space.
+  female connector will not fit afterwards. I recommend soldering the male connector while plugged into the female one, that way there is definitely enough space.
 
 # Component Placement
 

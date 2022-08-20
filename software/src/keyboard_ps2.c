@@ -34,6 +34,7 @@
 #ifdef DEBUG
 #include "terminal.h"
 #include <stdarg.h>
+// note that this only works if main.c is changed such that framebuf_init occurs before keyboard_init
 static void print(const char *format, ...)
 {
   char buffer[101];
@@ -48,11 +49,6 @@ static void print(const char *format, ...)
 #endif
 
 
-// defined in main.c
-void wait(uint32_t milliseconds);
-void run_tasks(bool processInput);
-
-
 // keyboard receiver state
 #define KBD_START  0
 #define KBD_BIT0   1
@@ -64,8 +60,9 @@ static int kbd_state = KBD_START;
 
 
 // keyboard states
+static int8_t  keyboardPresent = 0;
 static uint8_t sendLEDStatus = 0xFF, ignoreBytes = 0;
-static bool breakcode = false, extkey = false, keyboardPresent = false;
+static bool breakcode = false, extkey = false;
 static int  waitResponse = 0;
 
 
@@ -82,7 +79,7 @@ static const uint8_t __in_flash(".keymaps") scancodes[136] =
     HID_KEY_NONE,      HID_KEY_PERIOD,         HID_KEY_SLASH,      HID_KEY_L,               HID_KEY_SEMICOLON,       HID_KEY_P,         HID_KEY_MINUS,       HID_KEY_NONE,     // 0x48-0x4F
     HID_KEY_NONE,      HID_KEY_NONE,           HID_KEY_APOSTROPHE, HID_KEY_NONE,            HID_KEY_BRACKET_LEFT,    HID_KEY_EQUAL,     HID_KEY_NONE,        HID_KEY_NONE,     // 0x50-0x57
     HID_KEY_CAPS_LOCK, HID_KEY_SHIFT_RIGHT,    HID_KEY_ENTER,      HID_KEY_BRACKET_RIGHT,   HID_KEY_NONE,            HID_KEY_BACKSLASH, HID_KEY_NONE,        HID_KEY_NONE,     // 0x58-0x5F
-    HID_KEY_NONE,      HID_KEY_NONE,           HID_KEY_NONE,       HID_KEY_NONE,            HID_KEY_NONE,            HID_KEY_NONE,      HID_KEY_BACKSPACE,   HID_KEY_NONE,     // 0x60-0x67
+    HID_KEY_NONE,      HID_KEY_EUROPE_2,       HID_KEY_NONE,       HID_KEY_NONE,            HID_KEY_NONE,            HID_KEY_NONE,      HID_KEY_BACKSPACE,   HID_KEY_NONE,     // 0x60-0x67
     HID_KEY_NONE,      HID_KEY_KEYPAD_1,       HID_KEY_NONE,       HID_KEY_KEYPAD_4,        HID_KEY_KEYPAD_7,        HID_KEY_NONE,      HID_KEY_NONE,        HID_KEY_NONE,     // 0x68-0x6F
     HID_KEY_KEYPAD_0,  HID_KEY_KEYPAD_DECIMAL, HID_KEY_KEYPAD_2,   HID_KEY_KEYPAD_5,        HID_KEY_KEYPAD_6,        HID_KEY_KEYPAD_8,  HID_KEY_ESCAPE,      HID_KEY_NUM_LOCK, // 0x70-0x77
     HID_KEY_F11,       HID_KEY_KEYPAD_ADD,     HID_KEY_KEYPAD_3,   HID_KEY_KEYPAD_SUBTRACT, HID_KEY_KEYPAD_MULTIPLY, HID_KEY_KEYPAD_9,  HID_KEY_SCROLL_LOCK, HID_KEY_NONE,     // 0x78-0x7F
@@ -189,13 +186,18 @@ bool keyboard_send_byte(uint8_t data)
   busy_wait_us_32(110);
   
   // pull DATA line low and release CLK
-  gpio_set_dir(PIN_PS2_DATA, true); 
+  gpio_set_dir(PIN_PS2_DATA, true);
   gpio_set_dir(PIN_PS2_CLOCK, false); 
-  // [wait ?us for CLK to settle]
+  busy_wait_us_32(10); // [wait 10us for CLK to settle]
 
+  // send bits
   ok = keyboard_send_bits(data);
+
+  // reset keyboard state
+  kbd_state = KBD_START;
   
   // re-enable CLK interrupts
+  //gpio_acknowledge_irq(PIN_PS2_CLOCK, GPIO_IRQ_EDGE_FALL);
   gpio_set_irq_enabled(PIN_PS2_CLOCK, GPIO_IRQ_EDGE_FALL, true);
   
   return ok;
@@ -204,7 +206,7 @@ bool keyboard_send_byte(uint8_t data)
 
 uint8_t keyboard_send_byte_wait_response(uint8_t b)
 {
-  uint8_t retries = 10;
+  uint8_t retries = 5;
   while( retries-- > 0 )
     {
       waitResponse = -1;
@@ -214,10 +216,10 @@ uint8_t keyboard_send_byte_wait_response(uint8_t b)
           while( waitResponse<0 && get_absolute_time()<timeout );
           if( waitResponse>=0 && waitResponse!=0xFE ) retries = 0;
         }
-      
-      if( retries>0 ) wait(10);
+
+      if( retries>0 ) busy_wait_us_32(1000);
     }
-    
+
   return waitResponse < 0 ? 0 : waitResponse;
 }
 
@@ -227,7 +229,7 @@ static bool keyboard_send_led_status(uint8_t leds)
   if( keyboard_send_byte_wait_response(0xED)==0xFA )
     if( keyboard_send_byte_wait_response(leds)==0xFA )
       return true;
-   
+
   return false;
 }
 
@@ -245,8 +247,6 @@ static bool keyboard_set_repeat_rate(uint8_t rate)
 static void process_byte(uint8_t b)
 {
   uint8_t key = HID_KEY_NONE;
-
-  print("%02X ", b);
 
   // translate key code to keycode
   if( ignoreBytes>0 )
@@ -304,9 +304,10 @@ static void keyboard_bit_received(bool data)
 {
   static uint8_t kbd_data = 0, kbd_parity = 0;
   static absolute_time_t kbd_prev_pulse = 0;
+  absolute_time_t t = get_absolute_time();
 
   // clear error state if CLK line was idle for longer than 1ms
-  if( kbd_state == KBD_ERROR && (get_absolute_time()-kbd_prev_pulse)>1000 )
+  if( kbd_state == KBD_ERROR && (t-kbd_prev_pulse)>1000 )
     kbd_state = KBD_START;
   
   if( kbd_state == KBD_START )
@@ -333,7 +334,7 @@ static void keyboard_bit_received(bool data)
   else if( kbd_state == KBD_STOP )
     {
       if( kbd_data == 0xAA )
-        keyboard_reset();
+        keyboardPresent = -1; // keyboard announced itself, set flag to initialize it
       else if( waitResponse<0 )
         waitResponse = kbd_data;
       else
@@ -341,6 +342,8 @@ static void keyboard_bit_received(bool data)
       
       kbd_state = KBD_START;
     }
+
+  kbd_prev_pulse = t;
 }
 
 
@@ -362,14 +365,22 @@ void keyboard_ps2_set_led_status(uint8_t leds)
 
 void keyboard_ps2_task()
 {
-  if( keyboardPresent && sendLEDStatus!=0xFF )
+  if( keyboardPresent<0 )
+    {
+      // received 0xAA from keyboard => set keyboard parameters
+      keyboardPresent = 1;
+      keyboard_send_led_status(0);
+      keyboard_ps2_apply_settings();
+    }
+
+  if( keyboardPresent>0 && sendLEDStatus!=0xFF )
     { keyboard_send_led_status(sendLEDStatus); sendLEDStatus = 0xFF; }
 }
 
 
 void keyboard_ps2_apply_settings()
 {
-  if( keyboardPresent ) 
+  if( keyboardPresent>0 )
     keyboard_set_repeat_rate(((~config_get_keyboard_repeat_delay()<<5) & 0x60) | (~config_get_keyboard_repeat_rate() & 0x1F));
 }
 
@@ -395,8 +406,12 @@ void keyboard_ps2_init()
 
   // Set up change notification interrupt for CLK pin
   gpio_set_irq_enabled_with_callback(PIN_PS2_CLOCK, GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
-  
-  keyboardPresent = keyboard_send_led_status(0);
-  if( !keyboardPresent ) gpio_set_irq_enabled_with_callback(PIN_PS2_CLOCK, GPIO_IRQ_EDGE_FALL, false, &gpio_callback);
-  keyboard_ps2_apply_settings();
+
+  // See if keyboard responds to commands
+  keyboardPresent = keyboard_send_led_status(0) ? 1 : 0;
+
+  if( keyboardPresent>0 )
+    keyboard_ps2_apply_settings(); // keyboard is responsive, apply settings
+  else 
+    keyboard_send_byte_wait_response(0xFF); // some keyboards need a RESET command to start responding properly
 }

@@ -29,6 +29,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#define KEYBOARD_MODIFIER_BOTHSHIFT (KEYBOARD_MODIFIER_LEFTSHIFT|KEYBOARD_MODIFIER_RIGHTSHIFT)
+
 // defined in main.c
 void wait(uint32_t milliseconds);
 
@@ -90,7 +92,7 @@ const char *INFLASHFUN keyboard_get_keyname(uint16_t key)
     { strncat(namebuf, "LeftGUI-", buflen);   buflen -= 8; }
   if( (mod & KEYBOARD_MODIFIER_RIGHTGUI)!=0 )
     { strncat(namebuf, "RightGUI-", buflen);   buflen -= 9; }
-  if( (mod & (KEYBOARD_MODIFIER_LEFTSHIFT|KEYBOARD_MODIFIER_RIGHTSHIFT))!=0 ) 
+  if( (mod & (KEYBOARD_MODIFIER_BOTHSHIFT))!=0 )
     { strncat(namebuf, "Shift-", buflen); buflen -= 6; }
 
   key &= 0xFF;
@@ -119,6 +121,7 @@ struct IntlMapStruct
   uint8_t mapShift[71];
   struct { int code; bool shift; int character; } mapOther[10];
   struct { int code; int character; } mapAltGr[12];
+  uint8_t keypadDecimal;
 };
 
 
@@ -130,7 +133,7 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'u'  ,'v'  ,'w'  ,'x'  ,'y'  ,'z'  ,'1'  ,'2'  ,
      '3'  ,'4'  ,'5'  ,'6'  ,'7'  ,'8'  ,'9'  ,'0'  ,
      KEY_ENTER, KEY_ESC, KEY_BACKSPACE, KEY_TAB, ' ', '-', '=', '[',
-     ']'  ,'\\' ,0    ,';'  ,'\'' ,'`'  ,','  ,'.'  ,
+     ']'  ,'\\' ,'\\' ,';'  ,'\'' ,'`'  ,','  ,'.'  ,
      '/'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {0    ,0    ,0    ,0    ,'A'  ,'B'  ,'C'  ,'D'  ,
@@ -139,11 +142,12 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'U'  ,'V'  ,'W'  ,'X'  ,'Y'  ,'Z'  ,'!'  ,'@'  ,
      '#'  ,'$'  ,'%'  ,'^'  ,'&'  ,'*'  ,'('  ,')'  ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,'_'  ,'+'  ,'{'  ,
-     '}'  ,'|'  ,0    ,':'  ,'"'  ,'~'  ,'<'  ,'>'  ,
+     '}'  ,'|'  ,'|'  ,':'  ,'"'  ,'~'  ,'<'  ,'>'  ,
      '?'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {{0x64, 0, '\\'}, {0x64, 1, '|'}, {-1,-1}},
-    {{-1,-1}}
+    {{-1,-1}},
+    '.'
   },{ // UK English
     {0    ,0    ,0    ,0    ,'a'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -151,7 +155,7 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'u'  ,'v'  ,'w'  ,'x'  ,'y'  ,'z'  ,'1'  ,'2'  ,
      '3'  ,'4'  ,'5'  ,'6'  ,'7'  ,'8'  ,'9'  ,'0'  ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,'-'  ,'='  ,'['  ,
-     ']'  ,'#'  ,0    ,';'  ,'\'' ,'`'  ,','  ,'.'  ,
+     ']'  ,'#'  ,'#'  ,';'  ,'\'' ,'`'  ,','  ,'.'  ,
      '/'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {0    ,0    ,0    ,0    ,'A'  ,'B'  ,'C'  ,'D'  ,
@@ -160,11 +164,12 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'U'  ,'V'  ,'W'  ,'X'  ,'Y'  ,'Z'  ,'!'  ,'"'  ,
      '#'  ,'$'  ,'%'  ,'^'  ,'&'  ,'*'  ,'('  ,')'  ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,'_'  ,'+'  ,'{'  ,
-     '}'  ,'~'  ,0    ,':'  ,'@'  ,'~'  ,'<'  ,'>'  ,
+     '}'  ,'~'  ,'~'  ,':'  ,'@'  ,'~'  ,'<'  ,'>'  ,
      '?'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {{0x64, 0, '\\'}, {0x64, 1, '|'}, {-1,-1}},
-    {{-1,-1}}
+    {{-1,-1}},
+    '.'
   },{ // French
     {0    ,0    ,0    ,0    ,'q'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -172,7 +177,7 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'u'  ,'v'  ,'z'  ,'x'  ,'y'  ,'w'  ,'&'  ,0    ,
      '"'  ,'\'' ,'('  ,'-'  ,0    ,'_'  ,0    ,0    ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,')'  ,'='  ,'^'  ,
-     '$'  ,'*'  ,0    ,'m'  ,0    ,0    ,';'  ,':'  ,
+     '$'  ,'*'  ,'*'  ,'m'  ,0    ,0    ,';'  ,':'  ,
      '!'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {0    ,0    ,0    ,0    ,'Q'  ,'B'  ,'C'  ,'D'  ,
@@ -187,7 +192,8 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
     {{0x64, 0, '<'}, {0x64, 1, '>'}, {-1,-1}},
     {{0x1f, '~'  }, {0x21, '{'  }, {0x20, '#'  }, {0x22, '['  }, 
      {0x23, '|'  }, {0x25, '\\' }, {0x27, '@'  }, {0x2d, ']'  }, 
-     {0x2e, '}'  }, {0x64, '\\'  }, {-1,-1}}
+     {0x2e, '}'  }, {0x64, '\\'  }, {-1,-1}},
+    ','
   },{ // German
     {0    ,0    ,0    ,0    ,'a'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -195,7 +201,7 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'u'  ,'v'  ,'w'  ,'x'  ,'z'  ,'y'  ,'1'  ,'2'  ,
      '3'  ,'4'  ,'5'  ,'6'  ,'7'  ,'8'  ,'9'  ,'0'  ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,0    ,'\'' ,0    ,
-     '+'  ,'#'  ,0    ,0    ,0    ,'^'  ,','  ,'.'  ,
+     '+'  ,'#'  ,'#'  ,0    ,0    ,'^'  ,','  ,'.'  ,
      '-'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {0    ,0    ,0    ,0    ,'A'  ,'B'  ,'C'  ,'D'  ,
@@ -204,13 +210,14 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      'U'  ,'V'  ,'W'  ,'X'  ,'Z'  ,'Y'  ,'!'  ,'"'  ,
      0    ,'$'  ,'%'  ,'&'  ,'/'  ,'('  ,')'  ,'='  ,
      KEY_ENTER ,KEY_ESC   ,KEY_BACKSPACE  ,KEY_TAB ,' '  ,'?'  ,'`'  ,0    ,
-     '*'  ,'\'' ,0    ,0    ,0    ,0    ,';'  ,':'  ,
+     '*'  ,'\'' ,'\'', 0    ,0    ,0  ,';'  ,':'  ,
      '_'  ,0 , KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6   ,
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {{0x64, 0, '<'}, {0x64, 1, '>'}, {-1,-1}},
     {{0x14, '@'  }, {0x24, '{'  }, {0x25, '['  }, {0x27, '}'  }, 
      {0x26, ']'  }, {0x2d, '\\' }, {0x30, '~'  }, {0x64, '|'  }, 
-     {-1,-1}}
+     {-1,-1}},
+    ','
   },{ // Italian
     {0    ,0    ,0    ,0    ,'a'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -232,7 +239,8 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
      KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12, KEY_PRSCRN },
     {{0x64, 0, '<'}, {0x64, 1, '>'}, {-1,-1}},
     {{0x33, '@'  }, {0x34, '#'  }, {0x2f, '['  }, {0x30, ']'  }, 
-     {-1,-1}}
+     {-1,-1}},
+    ','
   },{ // Belgian
     {0    ,0    ,0    ,0    ,'q'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -255,7 +263,8 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
     {{0x64, 0, '<'}, {0x64, 1, '>'}, {-1,-1}},
     {{0x1e, '|'  }, {0x64, '\\' }, {0x1f, '@'  }, {0x20, '#'  }, 
      {0x27, '}'  }, {0x26, '{'  }, {0x38, '~'  }, {0x2f, '['  }, 
-     {0x30, ']'  }, {-1,-1}}
+     {0x30, ']'  }, {-1,-1}},
+    ','
   }, { // Spanish
     {0    ,0    ,0    ,0    ,'a'  ,'b'  ,'c'  ,'d'  ,
      'e'  ,'f'  ,'g'  ,'h'  ,'i'  ,'j'  ,'k'  ,'l'  ,
@@ -278,7 +287,8 @@ const struct IntlMapStruct __in_flash(".keymaps") intlMaps[7] = {
     {{0x64, 0, '<'}, {0x64, 1, '>'}, {-1,-1}},
     {{0x35, '\\' }, {0x1e, '|'  }, {0x1f, '@'  }, {0x21, '~'  }, 
      {0x20, '#'  }, {0x34, '{'  }, {0x2f, '['  }, {0x30, ']'  }, 
-     {0x31, '}'  }, {-1,-1}}
+     {0x31, '}'  }, {-1,-1}},
+    ','
   }
 };
 
@@ -349,14 +359,16 @@ uint8_t INFLASHFUN keyboard_map_key_ascii(uint16_t k, bool *isaltcode)
     }
   else if( (key >= HID_KEY_KEYPAD_DIVIDE) && (key <= HID_KEY_KEYPAD_DECIMAL) )
     {
-      if( (keyboard_led_status & KEYBOARD_LED_NUMLOCK)!=0 )
-        ascii = keyMapKeypadNum[key-HID_KEY_KEYPAD_DIVIDE];
-      else
+      if( (keyboard_led_status & KEYBOARD_LED_NUMLOCK)==0 )
         ascii = keyMapKeypad[key-HID_KEY_KEYPAD_DIVIDE];
+      else if( key==HID_KEY_KEYPAD_DECIMAL )
+        ascii = map->keypadDecimal;
+      else
+        ascii = keyMapKeypadNum[key-HID_KEY_KEYPAD_DIVIDE];
     }
   else
     {
-      bool shift = (modifier & (KEYBOARD_MODIFIER_LEFTSHIFT|KEYBOARD_MODIFIER_RIGHTSHIFT))!=0;
+      bool shift = (modifier & KEYBOARD_MODIFIER_BOTHSHIFT)!=0;
 
       for(i=0; map->mapOther[i].code>=0; i++)
         if( map->mapOther[i].code == key && map->mapOther[i].shift == shift )
@@ -421,13 +433,12 @@ uint8_t  macro_len = 0, macro_ptr = 0;
 uint16_t macro_key, macro_data[256];
 static uint8_t macro_status = MACRO_NONE;
 
-
 #define MACRO_KEY(p)          p[0]
 #define MACRO_DATA_LEN(p)     p[1]
 #define MACRO_DATA(p)         (p+2)
 #define MACRO_FIRST()         ((uint16_t *) config_get_keyboard_macros_start())
 #define MACRO_NEXT(p)         (p+2+MACRO_DATA_LEN(p))
-#define MACRO_EXTKEY(key,mod) ((key) | (mod) << 8)
+#define MACRO_EXTKEY(key,mod) ((key) | (((mod)|(mod&KEYBOARD_MODIFIER_BOTHSHIFT ? KEYBOARD_MODIFIER_BOTHSHIFT : 0)) << 8))
 
 
 static bool INFLASHFUN keyboard_find_macro(uint16_t key)

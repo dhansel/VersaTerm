@@ -24,7 +24,7 @@ USB,USB-A Connector,1,Digi-Key,ED2989-ND,On Shore Technology Inc.,USB-A1HSW6
 RS232,DB9 Connector,1,Digi-Key,AE10968-ND,Assmann WSW Components,A-DS 09 A/KG-T2S
 TTL Serial,Molex Connector Male,1,Digi-Key,A1928-ND,TE Connectivity AMP Connectors,640457-6
 U1,Raspberry Pi Pico,1,AdaFruit,4883,Raspberry Pi,SC0915
-U3,MAX3232 board,1,Digi-Key,1568-1208-ND,SparkFun,BOB-11189
+U3,MAX3232 board,1,Digi-Key,1568-1193-ND,SparkFun,BOB-11189
 ,Header Male 40 Pin,2,Digi-Key,732-5334-ND,Würth Elektronik,61304011121
 ,Header Female 40 Pin,2,Digi-Key,HDR100IMP40F-G-V-TH-ND,Chip Quik Inc.,HDR100IMP40F-G-V-TH
 ,D-Sub Jackscrew,2,Digi-Key,2057-JS-02-ND,Adam Tech,JS-02

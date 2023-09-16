@@ -401,8 +401,8 @@ static const struct MenuItemStruct __in_flash(".configmenus") terminalMenu[] =
 static const struct MenuItemStruct __in_flash(".configmenus") keyboardMenu[] =
     {{'1', "Layout",              0, NULL, 0, NULL, &settings.Keyboard.layout,     0,  6, 1, 0, {"English (US)", "English (UK)", "French", "German", "Italian", "Belgian", "Spanish"}},
      {'2', "Enter key sends",     0, NULL, 0, NULL, &settings.Keyboard.enter,      0,  4, 1, 0, {"CR", "LF", "CR+LF", "LF+CR", "nothing"}},
-     {'3', "Backspace key sends", 0, NULL, 0, NULL, &settings.Keyboard.backspace,  0,  2, 1, 0, {"backspace (0x08)", "delete (0x7f)", "nothing"}},
-     {'4', "Delete key sends",    0, NULL, 0, NULL, &settings.Keyboard.delete,     0,  2, 1, 1, {"backspace (0x08)", "delete (0x7f)", "nothing"}},
+     {'3', "Backspace key sends", 0, NULL, 0, NULL, &settings.Keyboard.backspace,  0,  3, 1, 0, {"backspace (0x08)", "delete (0x7f)", "underscore (0x5F)", "nothing"}},
+     {'4', "Delete key sends",    0, NULL, 0, NULL, &settings.Keyboard.delete,     0,  3, 1, 1, {"backspace (0x08)", "delete (0x7f)", "underscore (0x5F)", "nothing"}},
      {'5', "Scroll Lock key",     0, NULL, 0, NULL, &settings.Keyboard.scrolllock, 0,  1, 1, 1, {"ignored", "prevents scrolling"}},
      {'6', "Key repeat delay",    0, NULL, 0, NULL, &settings.Keyboard.repdelay,   0,  3, 1, 3, {"1000ms", "750ms", "500ms", "250ms"}},
      {'7', "Key repeat rate",     0, NULL, 0, keyboard_reprate_fn, &settings.Keyboard.reprate, 0, 31, 1, 25},

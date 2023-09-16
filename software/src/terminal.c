@@ -1270,7 +1270,7 @@ void INFLASHFUN terminal_receive_string(const char* str)
 
 static void INFLASHFUN send_cursor_sequence(char c)
 {
-  if( vt52_mode )
+  if( config_get_terminal_type()==CFG_TTYPE_VT52 || vt52_mode )
     { send_char(27); send_char(c); }
   else
     { send_char(27); send_char('['); send_char(c); }
@@ -1286,6 +1286,17 @@ static void INFLASHFUN terminal_process_key_vt(uint16_t key)
     case KEY_DOWN:   send_cursor_sequence('B'); break;
     case KEY_RIGHT:  send_cursor_sequence('C'); break;
     case KEY_LEFT:   send_cursor_sequence('D'); break;
+
+    case KEY_F1:
+    case KEY_F2:
+    case KEY_F3:
+    case KEY_F4:
+      {
+        send_char(27);
+        if( config_get_terminal_type()==CFG_TTYPE_VT102 && !vt52_mode ) send_char('O');
+        send_char('P' + (c-KEY_F1));
+        break;
+      }
 
     case KEY_ENTER:
       {
@@ -1305,6 +1316,7 @@ static void INFLASHFUN terminal_process_key_vt(uint16_t key)
           {
           case 0: send_char(0x08); break;
           case 1: send_char(0x7f); break;
+          case 2: send_char(0x5f); break;
           }
         break;
       }
@@ -1315,6 +1327,7 @@ static void INFLASHFUN terminal_process_key_vt(uint16_t key)
           {
           case 0: send_char(0x08); break;
           case 1: send_char(0x7f); break;
+          case 2: send_char(0x5f); break;
           }
         break;
       }

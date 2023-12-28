@@ -31,6 +31,27 @@ make
 This should create file VersaTerm/software/build/src/VersaTerm.uf2<br>
 Follow the "Uploading firmware to Raspberry Pi Pico" instructions above to upload the .uf2 file to the Pico.
 
+The instructions above will use the of pico-sdk, tinyusb and PicoDVI versions that were
+current when I wrote and tested VersaTerm. Building from those sources should result in
+the same VerTerm.uf2 file as the one in VersaTerm/software.
+
+If you feel adventurous you can build VersaTerm with the latest versions of the libraries:
+```
+git clone https://github.com/dhansel/VersaTerm.git
+cd VersaTerm/software/lib
+git submodule update --init
+cd pico-sdk/lib
+git submodule update --init
+git submodule update --remote --merge
+cd ../..
+git submodule update --remote --merge
+cd ..
+mkdir build
+cd build
+cmake .. -DPICO_SDK_PATH=../lib/pico-sdk -DPICO_COPY_TO_RAM=1
+make
+```
+
 ### TinyUSB updates
 
 The version of TinyUSB currently (May 2022) included with the Pico SDK appears to have problems 

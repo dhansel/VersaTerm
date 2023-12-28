@@ -17,7 +17,6 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 // -----------------------------------------------------------------------------
 
-#include "bsp/board.h"
 #include "keyboard.h"
 #include "keyboard_usb.h"
 #include "keyboard_ps2.h"

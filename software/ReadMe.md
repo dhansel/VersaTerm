@@ -63,3 +63,32 @@ git fetch
 git merge origin/master
 ```
 Then just "cd" back to VersaTerm/software/build and type "make" to re-build.
+
+## Some solutions to compile issues
+
+A big thank you to user [unclouded](https://github.com/un-clouded) who reported a number of compile-time 
+issues their solutions:
+
+When it said to me:
+
+    arm-none-eabi-gcc: fatal error: cannot read spec file 'nosys.specs': No such file or directory
+
+I replied:
+
+    apt install libnewlib-arm-none-eabi
+
+And when it said:
+
+    fatal error: cassert: No such file or directory
+
+I retorted:
+
+    apt install libstdc++-arm-none-eabi-dev
+
+And then it complained that:
+
+    /usr/lib/gcc/arm-none-eabi/12.2.1/../../../arm-none-eabi/bin/ld: cannot find -lstdc++: No such file or directory
+
+And I spake thusly:
+
+    apt install libstdc++-arm-none-eabi-newlib

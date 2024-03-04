@@ -67,7 +67,7 @@ Then just "cd" back to VersaTerm/software/build and type "make" to re-build.
 ## Some solutions to compile issues
 
 A big thank you to user [unclouded](https://github.com/un-clouded) who reported a number of compile-time 
-issues their solutions:
+issues and their solutions:
 
 When it said to me:
 

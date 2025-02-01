@@ -454,7 +454,7 @@ static void INFLASHFUN terminal_process_command(char start_char, char final_char
     }
   else if( final_char=='d' )
     {
-      move_cursor_limited(MAX(1, params[0]), cursor_col);
+      move_cursor_limited(MAX(1, params[0])-1, cursor_col);
     }
   else if( final_char=='G' || final_char=='`' )
     {

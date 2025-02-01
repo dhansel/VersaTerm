@@ -34,6 +34,7 @@ void    framebuf_dvi_set_attr(uint32_t idx, uint8_t a);
 // Pixel format RGB222
 void framebuf_dvi_set_color(uint32_t char_index, uint8_t fg, uint8_t bg);
 void framebuf_dvi_get_color(uint32_t char_index, uint8_t *fg, uint8_t *bg);
+void framebuf_dvi_invert();
 
 void framebuf_dvi_set_char_and_attr(uint32_t idx, uint32_t c);
 uint32_t framebuf_dvi_get_char_and_attr(uint32_t idx);

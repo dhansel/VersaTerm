@@ -23,6 +23,7 @@
 #include "pico/multicore.h"
 #include "hardware/irq.h"
 #include "hardware/vreg.h"
+#include "hardware/clocks.h"
 #include "hardware/structs/bus_ctrl.h"
 #include "dvi.h"
 #include "dvi_serialiser.h"
@@ -122,37 +123,50 @@ void framebuf_dvi_set_attr(uint32_t idx, uint8_t a)
 }
 
 
+void framebuf_dvi_invert()
+{
+  uint32_t s = COLOR_PLANE_SIZE_WORDS*3;
+  for(uint32_t i=0; i<s; i++)
+    {
+      uint32_t c = colorbuf[i];
+      colorbuf[i] = ((c & 0x33333333)<<2) | ((c & 0xCCCCCCCC)>>2);
+    }
+}
 
-// Pixel format RGB222
+
 void framebuf_dvi_set_color(uint32_t char_index, uint8_t fg, uint8_t bg)
 {
-  uint bit_index  = char_index % 8 * 4;
-  uint word_index = char_index / 8;
-  for (int plane = 0; plane < 3; ++plane) 
-    {
-      uint32_t fg_bg_combined = (fg & 0x3) | (bg << 2 & 0xc);
-      colorbuf[word_index] = (colorbuf[word_index] & ~(0xfu << bit_index)) | (fg_bg_combined << bit_index);
-      fg >>= 2;
-      bg >>= 2;
-      word_index += COLOR_PLANE_SIZE_WORDS;
-    }
+  uint32_t bit_index  = (char_index % 8) * 4;
+  uint32_t word_index = (char_index / 8);
+  uint32_t cpw = COLOR_PLANE_SIZE_WORDS;
+  uint32_t msk = ~(0x0f << bit_index);
+  uint32_t *c  = colorbuf+word_index;
+  uint32_t fg_bg_combined;
+
+  fg_bg_combined = (fg & 0x03) | ((bg & 0x03) << 2);
+  *c = (*c & msk) | (fg_bg_combined << bit_index);
+  c += cpw;
+
+  fg_bg_combined = ((fg & 0x0C) >> 2) | (bg & 0x0C);
+  *c = (*c & msk) | (fg_bg_combined << bit_index);
+  c += cpw;
+
+  fg_bg_combined = ((fg & 0x30) >> 4) | ((bg & 0x30) >> 2);
+  *c = (*c & msk) | (fg_bg_combined << bit_index);
 }
 
 
 void framebuf_dvi_get_color(uint32_t char_index, uint8_t *fg, uint8_t *bg)
 {
-  *fg = 0;
-  *bg = 0;
-  uint bit_index = char_index % 8 * 4;
-  uint word_index = char_index / 8 + 2*COLOR_PLANE_SIZE_WORDS;
-  for (int plane = 0; plane < 3; ++plane) 
-    {
-      *fg <<= 2;
-      *bg <<= 2;
-      *fg |= (colorbuf[word_index] & (0x03 << bit_index)) >> bit_index;
-      *bg |= (colorbuf[word_index] & (0x0c << bit_index)) >> (bit_index+2);
-      word_index -= COLOR_PLANE_SIZE_WORDS;
-    }
+  uint32_t bit_index  = (char_index % 8) * 4;
+  uint32_t word_index = (char_index / 8);
+  uint32_t cpw = COLOR_PLANE_SIZE_WORDS;
+  uint8_t c1 = colorbuf[word_index      ] >> bit_index;
+  uint8_t c2 = colorbuf[word_index+  cpw] >> bit_index;
+  uint8_t c3 = colorbuf[word_index+2*cpw] >> bit_index;
+
+  *fg = ((c1 & 0x03))      | ((c2 & 0x03) << 2) | ((c3 & 0x03) << 4);
+  *bg = ((c1 & 0x0C) >> 2) | ((c2 & 0x0C))      | ((c3 & 0x0C) << 2);
 }
 
 

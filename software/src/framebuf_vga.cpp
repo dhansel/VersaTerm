@@ -74,6 +74,18 @@ uint8_t framebuf_vga_get_attr(uint32_t idx)
 }
 
 
+void framebuf_vga_invert()
+{
+  uint32_t s = MAX_COLS*MAX_ROWS*4;
+  for(uint32_t i=0; i<s; i+=4)
+    {
+      uint8_t c    = charbuf[i+2];
+      charbuf[i+2] = charbuf[i+3];
+      charbuf[i+3] = c;
+    }
+}
+
+
 void framebuf_vga_set_color(uint32_t idx, uint8_t fg, uint8_t bg)
 {
   charbuf[idx*4 + 2] = bg;

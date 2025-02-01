@@ -30,12 +30,12 @@ typedef enum {
   ChkSum	
 } transfer_t;
 
-static const unsigned char NACK = 21;
-static const unsigned char ACK =  6;
+#define NACK 21
+#define ACK  6
 
-static const unsigned char SOH =  1;
-static const unsigned char EOT =  4;
-static const unsigned char CAN =  0x18;
+#define SOH  1
+#define EOT  4
+#define CAN  0x18
 
 static const int receiveDelay=7000;
 static const int rcvRetryLimit = 10;

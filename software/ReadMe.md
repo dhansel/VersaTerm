@@ -21,17 +21,23 @@ cd VersaTerm/software/lib
 git submodule update --init
 cd pico-sdk/lib
 git submodule update --init
-cd ../../..
+cd tinyusb
+git checkout 86ad6e5
+cd ../../../..
 mkdir build
 cd build
 cmake .. -DPICO_SDK_PATH=../lib/pico-sdk -DPICO_COPY_TO_RAM=1
 make
 ```
 
+The `git checkout 86ad6e5` command updates TinyUSB to version 0.18 instead of version 0.12
+which was included with the pico-sdk version used by VersaTerm. Version 0.12 has issues
+with (some) USB hubs which are resolved in 0.18.
+
 This should create file VersaTerm/software/build/src/VersaTerm.uf2<br>
 Follow the "Uploading firmware to Raspberry Pi Pico" instructions above to upload the .uf2 file to the Pico.
 
-The instructions above will use the of pico-sdk, tinyusb and PicoDVI versions that were
+The instructions above will use the of pico-sdk and PicoDVI versions that were
 current when I wrote and tested VersaTerm. Building from those sources should result in
 the same VerTerm.uf2 file as the one in VersaTerm/software.
 
@@ -51,18 +57,6 @@ cd build
 cmake .. -DPICO_SDK_PATH=../lib/pico-sdk -DPICO_COPY_TO_RAM=1
 make
 ```
-
-### TinyUSB updates
-
-The version of TinyUSB currently (May 2022) included with the Pico SDK appears to have problems 
-with USB hubs. These issues seem to be resolved in the latest updates though.
-To update TinyUSB to the latest version, do the following:
-```
-cd VersaTerm/lib/pico-sdk/lib/tinyusb
-git fetch
-git merge origin/master
-```
-Then just "cd" back to VersaTerm/software/build and type "make" to re-build.
 
 ## Some solutions to compile issues
 

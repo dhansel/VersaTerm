@@ -1279,9 +1279,18 @@ static void INFLASHFUN send_cursor_sequence(char c)
 
 static void INFLASHFUN terminal_process_key_vt(uint16_t key)
 {
-  uint8_t c = keyboard_map_key_ascii(key, NULL);
+  bool isaltcode;
+  uint8_t c = keyboard_map_key_ascii(key, &isaltcode);
   switch( c )
     {
+    //     LALT + 000 = \0;
+    // But LALT + less-than-three-numbers = silence
+    // Prevents sending extra nulls when entering codes
+    case 0:
+      if (isaltcode)
+        send_char(0x00);
+      break;
+
     case KEY_UP:     send_cursor_sequence('A'); break;
     case KEY_DOWN:   send_cursor_sequence('B'); break;
     case KEY_RIGHT:  send_cursor_sequence('C'); break;

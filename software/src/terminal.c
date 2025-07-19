@@ -1279,7 +1279,16 @@ static void INFLASHFUN send_cursor_sequence(char c)
 
 static void INFLASHFUN terminal_process_key_vt(uint16_t key)
 {
-  uint8_t c = keyboard_map_key_ascii(key, NULL);
+  bool isaltcode = false;
+  uint8_t c = keyboard_map_key_ascii(key, &isaltcode);
+
+  // if c is the result of user pressing LeftAlt-NNN then send without mapping
+  // if c==0 then we're in the middle of a LeftAlt-NNN sequence and need to not send anything
+  if( isaltcode )
+    { send_char(c); return; }
+  else if( c==0 )
+    return;
+
   switch( c )
     {
     case KEY_UP:     send_cursor_sequence('A'); break;
@@ -1364,7 +1373,11 @@ static void INFLASHFUN terminal_process_key_petscii(uint16_t key)
   uint8_t c = keyboard_map_key_ascii(key, &isaltcode);
 
   // if c is the result of user pressing LeftAlt-NNN then send without mapping
-  if( isaltcode ) { send_char(c); return; }
+  // if c==0 then we're in the middle of a LeftAlt-NNN sequence and need to not send anything
+  if( isaltcode )
+    { send_char(c); return; }
+  else if( c==0 )
+    return;
 
   switch( c )
     {

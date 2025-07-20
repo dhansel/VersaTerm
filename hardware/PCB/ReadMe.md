@@ -44,7 +44,8 @@ R21,R24	| Resistor 100 Ohm
 R1,R2,R3,R4,R5,R6,R7,R8	| Resistor 270 Ohm
 R14	| Resistor 390 Ohm
 R17,R20,R25,R26	| Resistor 470 Ohm
-R13,R16,R19,R27,R28,R29,R30	| Resistor 1k
+R13,R16,R19,R27,R28	| Resistor 1k
+R29,R30	| Resistor 1k or 10k (see note below)
 R15,R18	| Resistor 2k2
 R22	| Resistor 4.7k
 R9,R10,R11,R12,R23	| Resistor 10k Ohm
@@ -66,6 +67,10 @@ RS232	| DB9 Connector
 TTL Serial	| Molex Connector Male
 U1	| Raspberry Pi Pico
 U3	| MAX3232 board
+
+**Note:** Some users have [reported](https://github.com/dhansel/VersaTerm/issues/16) issues with VersaTerm receiving data, which was caused by the R29/R30 1k pull-up resistors being too strong. 
+If you experience issues receiving then I recommend switching these to 10k.
+
   
 # Finished PCB
 ![board_top](../pictures/board_top.jpg)

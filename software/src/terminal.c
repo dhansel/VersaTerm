@@ -1341,18 +1341,6 @@ static void INFLASHFUN terminal_process_key_vt(uint16_t key)
         break;
       }
 
-    case KEY_INSERT:
-      {
-        terminal_receive_string(insert_mode ? "\033[4l" : "\033[4h");
-        break;
-      }
-
-    case KEY_HOME:
-      {
-        terminal_receive_string(keyboard_shift_pressed(key) ? "\033[2J\033[H" : "\033[H");
-        break;
-      }
-
     default:  
       if( config_get_terminal_uppercase() && isalpha(c) ) c = toupper(c);
       send_char(c);

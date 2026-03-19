@@ -1,6 +1,7 @@
 [submodule "lib/pico-sdk"]
 	path = software/lib/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
+	ignore = dirty
 [submodule "lib/PicoDVI"]
 	path = software/lib/PicoDVI
 	url = https://github.com/Wren6991/PicoDVI.git

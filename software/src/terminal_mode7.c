@@ -33,7 +33,7 @@
 // Screen dimensions
 // ---------------------------------------------------------------------------
 #define VD_COLS  40
-#define VD_ROWS  25
+#define VD_ROWS  24
 
 // ---------------------------------------------------------------------------
 // Viewdata 8-colour values — ANSI 4-bit colour indices mapped to the

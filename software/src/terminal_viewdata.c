@@ -47,7 +47,7 @@
 //   0x11  DC1  cursor on
 //   0x14  DC4  cursor off
 //   0x1B  ESC  next byte is C1 (in range 0x40-0x5F)
-//   0x1E  RS   cursor home (row → 0, column preserved)
+//   0x1E  RS   cursor home
 //
 // C1 control codes (byte sent after ESC, range 0x40-0x5F)
 // --------------------------------------------------------
@@ -126,9 +126,7 @@ static uint8_t vd_ctrl[VD_ROWS][VD_COLS];
 // ---------------------------------------------------------------------------
 static int  vd_col, vd_row;
 static bool vd_cursor_on;
-static bool vd_esc;          // true: next incoming byte is a C1 control code
-static bool vd_last_was_rs;  // true if previous received byte was RS (0x1E)
-static bool vd_dc1_pending;  // true if previous received byte was DC1 (0x11)
+static bool vd_esc;      // true: next incoming byte is a C1 control code
 
 // ---------------------------------------------------------------------------
 // Row-level attribute state (rebuilt by vd_render_row scanning from col 0)
@@ -428,6 +426,9 @@ static INFLASHFUN void vd_move_cursor(int row, int col)
   if (row >= VD_ROWS) row = VD_ROWS - 1;
   vd_col = col;
   vd_row = row;
+  // Don't draw cursor while more data is incoming; it will be drawn
+  // at the final position once the stream pauses.
+  if (!serial_readable()) vd_cursor_draw();
 }
 
 // ---------------------------------------------------------------------------
@@ -472,8 +473,6 @@ void INFLASHFUN terminal_viewdata_init(void)
 {
   vd_cursor_on     = true;
   vd_esc           = false;
-  vd_last_was_rs   = false;
-  vd_dc1_pending   = false;
   cursor_col_saved = -1;
   cursor_row_saved   = -1;
   vd_col             = 0;
@@ -508,12 +507,6 @@ void INFLASHFUN terminal_viewdata_receive_char(char ch)
   // Strip parity (Prestel is 7-bit odd-parity over serial)
   uint8_t c = (uint8_t)ch & 0x7Fu;
 
-  // Capture and reset per-byte tracking flags; the relevant cases set them back.
-  bool was_rs  = vd_last_was_rs;
-  bool was_dc1 = vd_dc1_pending;
-  vd_last_was_rs  = false;
-  vd_dc1_pending  = false;
-
   // --- ESC: next byte is C1 ---
   if (vd_esc) {
     vd_esc = false;
@@ -532,30 +525,25 @@ void INFLASHFUN terminal_viewdata_receive_char(char ch)
       vd_cursor_erase();
       vd_clear_screen();
       vd_col = 0; vd_row = 0;
+      if (!serial_readable()) vd_cursor_draw();
       return;
     case 0x0D: vd_move_cursor(vd_row, 0);           return; // CR   col→0
-    case 0x11:                                           // DC1 cursor on
-      vd_cursor_erase(); vd_cursor_on = true; vd_dc1_pending = true; vd_cursor_draw(); return;
-    case 0x14:                                           // DC4 cursor off
-      vd_cursor_erase(); vd_cursor_on = false;
-      // DC1 immediately followed by DC4 is the "new prompt" pattern (vs echo).
-      // Reset col to 0 so the prompt content writes from the start of the line.
-      if (was_dc1) vd_col = 0;
-      return;
+    case 0x11: vd_cursor_erase(); vd_cursor_on = true; vd_cursor_draw(); return; // DC1 cursor on
+    case 0x14: vd_cursor_erase(); vd_cursor_on = false; return; // DC4 cursor off
     case 0x1B: vd_esc = true;  return;                  // ESC
     case 0x1E:                                           // RS   home
       vd_cursor_erase();
-      // Clear the bottom row (input line) only on consecutive RS codes.
-      // New-page sequences send 1E 1E 1E; keypress-echo sequences send a
-      // single 1E followed by LFs.  A single RS must not clear row 23 or
-      // typed characters appear at bottom-left instead of the input field.
-      if (was_rs) {
-        memset(vd_buf [VD_ROWS - 1], 0x20, VD_COLS);
-        memset(vd_ctrl[VD_ROWS - 1], 0x00, VD_COLS);
-        vd_render_row(VD_ROWS - 1);
-      }
-      vd_row = 0;
-      vd_last_was_rs = true;
+      // Clear the bottom row (input line) to remove residual attribute codes
+      // from previous page content.  The service sends RS before both new page
+      // content and the '*' input prompt — neither sends FF first — so old
+      // in-band attributes (e.g. Alpha-White + New-Background from a coloured
+      // banner) would otherwise persist in vd_ctrl[23] and bleed into the
+      // prompt rendering, turning it yellow-on-white instead of yellow-on-black.
+      memset(vd_buf [VD_ROWS - 1], 0x20, VD_COLS);
+      memset(vd_ctrl[VD_ROWS - 1], 0x00, VD_COLS);
+      vd_render_row(VD_ROWS - 1);
+      vd_col = 0; vd_row = 0;
+      if (!serial_readable()) vd_cursor_draw();
       return;
     default: break;
   }
